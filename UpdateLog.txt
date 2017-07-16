@@ -1,0 +1,71 @@
+0.10.2.0-Alpha
+~Fixed reconnecting to a new channel
+>>No longer builds up multiple instances (clears out array lists onJoin)
+>>Disallows reconnecting to the same channel
+-mini-mods/!mods
+~Moved link filtering out of TwIRChBotUtils.java into ChatFilter.java and added nonfunctioning methods.
+
+0.10.1.0-Alpha:
+~Reworte the FileManager class to be constructed with the current working directory allowing me to pass in the directory and file name variables easier
+~Fixed all the code in the main and utils classes that broke with redesigning the filemanager class
+
+0.10.0.0-Alpha:
++Actually figured out how to update the TextArea from botUtils >->'
++You can now swap between channels easily by updating the channel textbox and pressing "Update and reconnect"
++Same goes for bot account if you have the username + oauth available
++Localized connected and join message are send to the client, but not the server
+~Completely redesigned the program window
+~Automatically loads login information if a file exists with the information, displays it immediately
+-Console output stream switching
+-A LOT of junk code
+-Log file currently isn't being printed
+
+0.9.8.2-Alpha:
++Added isBroadcaster() check to the links filter
+~Modified command checking algorithm to ignore character case
+
+0.9.8.1-Alpha:
+~Corrected my stupidity with timeout and whispers *facepalm*
+
+0.9.8-Alpha:
+-All hard-coded commands excepts !addcmd !help !mods !admins and !version
++Basic link filter to prevent non-"staff" from posting malicious links, purges them, then whispers them why
++Long-message filter. Any message (recieved) over 256 characters gets purged, then whispered why
++!reload command which clears the commands lists and re-reads the file (for live editing)
++!addcmd with support for adding optional help text or not (seems to cause case-sensitivity)
++Mods can !setmulti again
+>>If !setmulti is not followed by a user, the multi is cleared
++"help" commands now work. All commands can have their "!" replaced with "?" for simple information about commands
++Began coding replacement text for <multi>, <first>, and <second> variables in the commands folder, currently only <multi>works.
+~Woomies are currently being transferred over to a currency-based system
+~!mods and !admins are currently disabled. I need to re-add that handling code into the new system
+
+0.9.7-Alpha:
++Added code to create the default files for newly-run instances of the bot. Printed out instructions, etc.
++All files are now in a sub folder called "files"
+++Files: lastest.log ChatBotInfo.dat Moderators.txt Commands.txt Currency.txt ReadMePls.txt
+~Changed version from vX.X.X-Xxxx to X.X.X-Xxxx because whatever
+~Modified !version command to only be used once per running instance and whisper me the version rather than print it
+
+0.9.6.1-Alpha:
+~Corrected an exploit where a user could theoretically add himself to the admins list.
+~Modified woomy counter because bugs
+
+0.9.6-Alpha:
++Woomy counter. Started at 381 for the first stream
+
+0.9.5-ALPHA:
++Began coding filtering for chat
+
+0.9.4-ALPHA:
++!setmulti and !multi response
++!setmessage and !message response
+~Modification to prevent potential crash trying to join a channel when already connected (not yet fully implemented)
+
+0.9.3-ALPHA:
++Code to read moderators.txt and commands.txt and import them into memory
+
+
+ideas:
+"banned phrases" text file for filtering personal info, memes, and copy-pastas
+when a mod/admin does !cmds PM's them commands available to them

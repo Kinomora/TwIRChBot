@@ -62,7 +62,7 @@ public class TwIRChbot extends javax.swing.JFrame {
 	public static String h;
 	public static String m;
 	public static String s;
-	public static String version = "0.11.0.0-ALPHA";
+	public static String version = "0.11.0.1-ALPHA";
 
 	// Objects
 

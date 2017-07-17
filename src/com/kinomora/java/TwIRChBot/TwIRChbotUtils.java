@@ -272,7 +272,7 @@ public class TwIRChbotUtils extends PircBot {
 					// Check to replace <multi>
 					if (importedActions.get(i).contains("<multi>")) {
 						if (multi.equals("")) {
-							sendBotMessage(channel, channel + " isn't current streaming with anyone else TheFeels");
+							sendBotMessage(channel, channel.substring(1) + " isn't current streaming with anyone else TheFeels");
 							break;
 						} else {
 							sendBotMessage(channel, importedActions.get(i).replace("<multi>", multi));

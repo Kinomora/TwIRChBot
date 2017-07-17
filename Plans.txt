@@ -1,0 +1,47 @@
+Current plans
+
+Make all messages inside the bot imported from a file to allow customization, language changes, and more.
+
+Currency system with:
+-Raffles
+-Voting
+-Games
+-Earn currency based off:
+--time spent in channel while streaming
+--number of streams watched consecutively
+--amount chatted over certain amount of time
+--Attempt to check for "spammy" chat and not count that (unlikely)
+
+Add more to ChatFilter:
+-Banned words
+-Banned topics
+-Detect trolling
+-New users (auto-ban users with < {configurable} days on twitch
+
+Chat encouragement system:
+-Start conversations with a topic generator (possibly configurable)
+-Setup convo between certain people with something like "/sharedrink"
+
+User management
+-Change !mod and !unmod to actually /mod and /unmod users to sync Twitch with the bot
+
+Media management:
+-Autocreate clips/highights given a timeframe
+-Auto detect uptime
+-Allow sending tweets from chat
+
+Timmed messages:
+-Manage based on time, configurable in seconds
+-Cycle through a list file containing messages like "Check out my twitter" or "Join my discord!"
+
+Trigger messages:
+-Customizable to send a message in chat if a user:
+--Follows
+--Subs
+--Donates
+--Sends bits
+
+Game integration: (Highly unlikely)
+-Get stats for splatoon if a webhook is available
+-Get stats for destiny character
+-Get Minecraft server info if available

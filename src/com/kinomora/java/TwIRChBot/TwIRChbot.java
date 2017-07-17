@@ -74,8 +74,6 @@ public class TwIRChbot extends javax.swing.JFrame {
 	static String Log = "latest.log";
 	static File login;
 	static String Login = "login.txt";
-	static File moderators;
-	static String Moderators = "moderators.txt";
 	static File commands;
 	static String Commands = "commands.txt";
 	static File currency;
@@ -307,19 +305,7 @@ public class TwIRChbot extends javax.swing.JFrame {
 		try {
 			login.createNewFile();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		// Generate a moderators file if one doesn't exist
-		moderators = new File(directory + Moderators);
-		try {
-			moderators.createNewFile();
-			if (moderators.length() < 64) {
-				generateModeratorsFile();
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			System.out.println("login.txt already exists!");
 			e.printStackTrace();
 		}
 
@@ -327,19 +313,20 @@ public class TwIRChbot extends javax.swing.JFrame {
 		commands = new File(directory + Commands);
 		try {
 			commands.createNewFile();
-			if (commands.length() < 64) {
+			if (!commands.exists()) {
+				System.out.println("Could not find commands.txt! Creating..");
 				generateCommandsFile();
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		// Generate a currecny file if one doesn't exist
+		// Generate a currency file if one doesn't exist
 		currency = new File(directory + Currency);
 		try {
 			currency.createNewFile();
-			if (currency.length() < 64) {
+			if (!currency.exists()) {
+				System.out.println("Could not find currency.txt! Creating..");
 				generateCurrencyFile();
 			}
 		} catch (IOException e) {
@@ -351,7 +338,8 @@ public class TwIRChbot extends javax.swing.JFrame {
 		websites = new File(directory + Websites);
 		try {
 			websites.createNewFile();
-			if (websites.length() < 64) {
+			if (!websites.exists()) {
+				System.out.println("Could not find websites.txt! Creating..");
 				generateWebSitesFile();
 			}
 		} catch (IOException e) {
@@ -363,22 +351,13 @@ public class TwIRChbot extends javax.swing.JFrame {
 		readme = new File(directory + Readme);
 		try {
 			readme.createNewFile();
-			if (readme.length() < 64) {
+			if (!readme.exists()) {
+				System.out.println("Could not find readme.txt! Creating..");
 				generateReadMeFile();
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-	}
-
-	private void generateModeratorsFile() {
-		try {
-			file.writeToFile("moderators.txt", "##Cannot be empty");
-			file.writeToFile("moderators.txt", "##Lines beginning with ## are ignored");
-		} catch (IOException IOErr) {
-			// TODO Auto-generated catch block
-			IOErr.printStackTrace();
 		}
 	}
 
@@ -467,9 +446,9 @@ public class TwIRChbot extends javax.swing.JFrame {
 					"Make sure you have permission to use this bot in the chat you're connecting to.\n");
 			file.writeToFile(Readme, "The only \"hard wired\" commands are:\n");
 			file.writeToFile(Readme, "!addcmd\n");
+			file.writeToFile(Readme, "!mods\n");
 			file.writeToFile(Readme, "!help/!cmds/!commands/!\n");
 			file.writeToFile(Readme, "!mods\n");
-			file.writeToFile(Readme, "!admins\n");
 			file.writeToFile(Readme, "*!version\n");
 			file.writeToFile(Readme, "\n");
 			file.writeToFile(Readme,
@@ -483,8 +462,7 @@ public class TwIRChbot extends javax.swing.JFrame {
 			file.writeToFile(Readme,
 					"causes the bot to whisper me the version which it is running on. Nothing else will\n");
 			file.writeToFile(Readme,
-					"happen and no other person can use this command under any other circumstance.\n");
-			file.writeToFile(Readme, "\n");
+					"happen and no other person can use this command under any other circumstance.\n\n");
 			file.writeToFile(Readme, "My sincerest gratitude,\n");
 			file.writeToFile(Readme, "Kinomora\n");
 		} catch (IOException IOErr) {

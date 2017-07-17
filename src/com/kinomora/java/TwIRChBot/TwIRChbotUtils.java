@@ -80,7 +80,7 @@ public class TwIRChbotUtils extends PircBot {
 		try {
 			loadCommandsFile();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			sendBotMessage("", "No commands file found!");
 			e.printStackTrace();
 		}
 
@@ -92,6 +92,9 @@ public class TwIRChbotUtils extends PircBot {
 
 		// Add the broadcaster to the admins list
 		Admins.add(channel.substring(1, channel.length()));
+
+		// Fix the stupid channel shit
+		this.currentChannel = channel;
 	}
 
 	public void username(String username) {
@@ -150,7 +153,7 @@ public class TwIRChbotUtils extends PircBot {
 		}
 
 		// Excessive chat length
-		if (message.length() > 256) {
+		if (message.length() > 400) {
 			sendBotMessage(channel, ".timeout " + sender + " 1");
 			sendBotMessage(channel, "@" + sender
 					+ " Please don't post such long messages. Try breaking it up if you've got a lot to say.");
@@ -169,7 +172,24 @@ public class TwIRChbotUtils extends PircBot {
 			}
 		}
 
-		/*** Commands only available to mods and up ***/
+		/***
+		 * Commands only available to the broadcaster
+		 ***/
+		if (isBroadcaster(sender)) {
+			if (message.startsWith("!mod ") && message.length() > 5) {
+				filter.addTempAdmin(message.substring(5));
+				Admins.add(message.substring(5));
+			} else if (message.startsWith("!unmod ") && message.length() > 7) {
+				filter.tempRemoveAdmin(message.substring(7));
+				Admins.remove(message.substring(7));
+			} else if (message.equals("!mod")) {
+				sendBotMessage(sender, "I think you're using that command wrong! Do !mod <user> or !unmod <user>.");
+			}
+		}
+
+		/***
+		 * Commands only available to admins (and broadcaster)
+		 ***/
 		if (isAdmin(sender)) {
 			// Set the multi-stream
 			if (message.contains("!setmulti")) {
@@ -185,9 +205,9 @@ public class TwIRChbotUtils extends PircBot {
 				importedHelp.clear();
 				try {
 					loadCommandsFile();
-					sendBotMessage(channel, "Reloaded!");
+					sendBotMessage(channel, "Commands reloaded!");
 				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
+					sendBotMessage("", "No commands file found!");
 					e.printStackTrace();
 				}
 			} else
@@ -224,6 +244,15 @@ public class TwIRChbotUtils extends PircBot {
 			}
 		}
 
+		// Temp everyone command//
+		if (message.equalsIgnoreCase("!mods")) {
+			String temp = "The users with admin powers in this channel are: ";
+			for (String user : Admins) {
+				temp += user + ", ";
+			}
+			sendBotMessage(channel, temp.substring(0, temp.length() - 2));
+		} else
+
 		/*** Commands available to everyone ***/
 		// Check if they tried to list the commands first
 		if (message.equalsIgnoreCase("!") || message.equalsIgnoreCase("!commands") || message.equalsIgnoreCase("!cmds")
@@ -243,7 +272,7 @@ public class TwIRChbotUtils extends PircBot {
 					// Check to replace <multi>
 					if (importedActions.get(i).contains("<multi>")) {
 						if (multi.equals("")) {
-							sendBotMessage(channel, "Kino isn't current streaming with anyone else TheFeels");
+							sendBotMessage(channel, channel + " isn't current streaming with anyone else TheFeels");
 							break;
 						} else {
 							sendBotMessage(channel, importedActions.get(i).replace("<multi>", multi));
@@ -282,9 +311,22 @@ public class TwIRChbotUtils extends PircBot {
 		filter.admins.clear();
 	}
 
+	/**
+	 * Sends a message to Twitch while updating the chat pane in the main GUI
+	 * 
+	 * @param channel
+	 *            - The name of the channel to send the message to. If "" is
+	 *            sent, only the chat pane receives the message.
+	 * @param message
+	 *            - The actual message to push to twitch and the GUI chat pane.
+	 **/
 	private void sendBotMessage(String channel, String message) {
-		sendMessage(channel, message);
-		TwIRChbot.updateChat(this.getNick(), message);
+		if (!channel.equals("")) {
+			sendMessage(channel, message);
+			TwIRChbot.updateChat(this.getNick(), message);
+		} else {
+			TwIRChbot.updateChat("[SYSTEM]", message);
+		}
 	}
 
 	private void loadCommandsFile() throws FileNotFoundException {
@@ -331,6 +373,6 @@ public class TwIRChbotUtils extends PircBot {
 	}
 
 	public boolean isBroadcaster(String user) {
-		return user.equalsIgnoreCase(currentChannel);
+		return user.equalsIgnoreCase(currentChannel.substring(1));
 	}
 }

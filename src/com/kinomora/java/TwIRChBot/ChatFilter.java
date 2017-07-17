@@ -13,6 +13,11 @@ public class ChatFilter {
 	public List<String> admins = new ArrayList<>();
 
 	public ChatFilter() {
+		//Clear old channel data
+		permittedSites.clear();
+		identifiedTLDs.clear();
+		
+		//Update the lists
 		populateTLDs();
 		populateSites();
 	}
@@ -29,6 +34,7 @@ public class ChatFilter {
 	}
 
 	public void updateAdminsList(List<String> importedAdmins) {
+		admins.clear();
 		for (String user : importedAdmins) {
 			admins.add(user);
 		}
@@ -52,12 +58,10 @@ public class ChatFilter {
 		for (String item : identifiedTLDs) {
 			if (message.contains(item)) {
 				// Identified a TLD, process for permitted domain.
-				System.out.println("Had TLD");
 				return testForDomain(message);
 			}
 		}
 		// Did not contain an identified URL
-		System.out.println("Had no URL");
 		return true;
 	}
 
@@ -65,20 +69,19 @@ public class ChatFilter {
 		for (String item : permittedSites) {
 			if (message.contains(item)) {
 				// Identified permitted domain
-				System.out.println("Had permitted domain");
 				return true;
 			}
 		}
 		// No permitted domain was identified
-		System.out.println("Had no permitted");
 		return false;
 	}
 
 	public void populateSites() {
 		// Load the websites.txt file
 		// Declare the file and scanner objects
-		File websitesFile = new File("./ChatbotFiles/websites.txt");
+		File websitesFile = new File(TwIRChbot.directory + "websites.txt");
 		Scanner scanner;
+		int i = 0;
 
 		// Try to open the file, if it exists
 		try {
@@ -91,9 +94,10 @@ public class ChatFilter {
 				currentLine = scanner.nextLine();
 				if (!currentLine.contains("##") && !currentLine.isEmpty()){
 					permittedSites.add(currentLine);
-					System.out.println("Added " + currentLine + " to allowed sites list.");
+					i++;
 				}
 			}
+			System.out.println("Added " + i + " permitted websites.");
 			scanner.close();
 		} catch (FileNotFoundException e) {
 			// Catch the stack-trace of the error
@@ -133,6 +137,7 @@ public class ChatFilter {
 		identifiedTLDs.add(".ca");
 		identifiedTLDs.add(".au");
 		identifiedTLDs.add(".eu");
+		identifiedTLDs.add(".nz");
 		identifiedTLDs.add(".uk");
 		identifiedTLDs.add(".gg");
 		identifiedTLDs.add(".tk");

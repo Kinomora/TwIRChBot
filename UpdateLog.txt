@@ -1,9 +1,22 @@
-0.10.2.0-Alpha
+0.11.0.0-Alpha
++Proper link filtering
++websites.txt to add or remove permitted sites
++Admins list is populated when a channel is joined
++All ArrayLists in TwIRChbotUtils clear when the bot is created (when it's told to join a channel)
++Added a way to send messages to the GUI chat without sending them to twitch (for notices, warnings, etc.)
++Broadcasters can add and remove admins from the bot with !mod and !unmod, reset to "people with swords" on relaunch.
+-mini-mods/!admins
+-moderators.txt file
+-Bot no longer greets me in chat on version-check
+~!mods now lists the admins in the channel
+~Max message length increased to 400
+~Bot doesn't wisper, but responds in chat to someone being timed out
 ~Fixed reconnecting to a new channel
 >>No longer builds up multiple instances (clears out array lists onJoin)
 >>Disallows reconnecting to the same channel
--mini-mods/!mods
-~Moved link filtering out of TwIRChBotUtils.java into ChatFilter.java and added nonfunctioning methods.
+~Moved link filtering out of TwIRChbotUtils.java into ChatFilter.java
+~Moved variables to the top of TwIRChbot.java
+(probably more stuff too)
 
 0.10.1.0-Alpha:
 ~Reworte the FileManager class to be constructed with the current working directory allowing me to pass in the directory and file name variables easier
@@ -30,7 +43,7 @@
 0.9.8-Alpha:
 -All hard-coded commands excepts !addcmd !help !mods !admins and !version
 +Basic link filter to prevent non-"staff" from posting malicious links, purges them, then whispers them why
-+Long-message filter. Any message (recieved) over 256 characters gets purged, then whispered why
++Long-message filter. Any message (received) over 256 characters gets purged, then whispered why
 +!reload command which clears the commands lists and re-reads the file (for live editing)
 +!addcmd with support for adding optional help text or not (seems to cause case-sensitivity)
 +Mods can !setmulti again

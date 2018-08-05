@@ -1,34 +1,6 @@
-/*
- * Copyright (c) 2010, Oracle. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *
- * * Redistributions of source code must retain the above copyright notice,
- *   this list of conditions and the following disclaimer.
- *
- * * Redistributions in binary form must reproduce the above copyright notice,
- *   this list of conditions and the following disclaimer in the documentation
- *   and/or other materials provided with the distribution.
- *
- * * Neither the name of Oracle nor the names of its contributors
- *   may be used to endorse or promote products derived from this software without
- *   specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
- * THE POSSIBILITY OF SUCH DAMAGE.
- */// </editor-fold> 
 package com.kinomora.java.TwIRChBot;
 
+import java.awt.EventQueue;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -38,50 +10,35 @@ import java.util.Scanner;
 import org.jibble.pircbot.IrcException;
 
 public class TwIRChbot extends javax.swing.JFrame {
-	private static final long serialVersionUID = (long) Math.random();
+	private static final double serialVersionUID = Math.random();
 
-	// GUI variables
-	private javax.swing.JLabel jLabel1;
-	private javax.swing.JLabel jLabel2;
-	private javax.swing.JLabel jLabel3;
-	private javax.swing.JScrollPane jScrollPane1;
+
 	private static javax.swing.JTextArea chat;
-	private javax.swing.JButton updateButton;
 	private javax.swing.JTextField channelIn;
 	private javax.swing.JTextField usernameIn;
 	private javax.swing.JPasswordField oauthIn;
 	private javax.swing.JTextField sendMessage;
 
 	// Used variables
-	public static String directory = "./ChatbotFiles/";
-	public String currentChannel = "";
-	public String channel = "";
-	public String oauth = "";
-	public String username = "TwitchChatBot";
-	public boolean loadLogin = false;
-	public static String h;
-	public static String m;
-	public static String s;
-	public static String version = "0.11.0.1-ALPHA";
+	static String directory = "./ChatbotFiles/";
+	private String currentChannel = "";
+	private String channel = "";
+	private String oauth = "";
+	private String username = "TwitchChatBot";
+	private boolean loadLogin = false;
+	private static String version = "0.11.2.0-ALPHA";
 
 	// Objects
 
-	public TwIRChbotUtils bot = new TwIRChbotUtils(username, version, directory);
+	private TwIRChbotUtils bot = new TwIRChbotUtils(username, version, directory);
 
 	// Files
-	FileManager file;
-	static File log;
-	static String Log = "latest.log";
-	static File login;
-	static String Login = "login.txt";
-	static File commands;
-	static String Commands = "commands.txt";
-	static File currency;
-	static String Currency = "currency.txt";
-	static File websites;
-	static String Websites = "websites.txt";
-	static File readme;
-	static String Readme = "readme.txt";
+    private FileManager file;
+    private static File login;
+    private static String Commands = "commands.txt";
+    private static String Currency = "currency.txt";
+    private static String Websites = "websites.txt";
+    private static String Readme = "readme.txt";
 
 
 	// Initialization Constructor
@@ -102,21 +59,22 @@ public class TwIRChbot extends javax.swing.JFrame {
 
 		// Initialize the GUI components
 		initComponents();
-	}
+    }
 
 	// Constructs the GUI
 	private void initComponents() {
 
-		jLabel1 = new javax.swing.JLabel();
-		jLabel2 = new javax.swing.JLabel();
-		jLabel3 = new javax.swing.JLabel();
+	    // Variables
+		javax.swing.JLabel jLabel1 = new javax.swing.JLabel();
+        javax.swing.JLabel jLabel2 = new javax.swing.JLabel();
+        javax.swing.JLabel jLabel3 = new javax.swing.JLabel();
+        javax.swing.JScrollPane jScrollPane1 = new javax.swing.JScrollPane();
+        javax.swing.JButton updateButton = new javax.swing.JButton();
 		channelIn = new javax.swing.JTextField();
 		usernameIn = new javax.swing.JTextField();
 		oauthIn = new javax.swing.JPasswordField();
-		jScrollPane1 = new javax.swing.JScrollPane();
 		chat = new javax.swing.JTextArea();
 		sendMessage = new javax.swing.JTextField();
-		updateButton = new javax.swing.JButton();
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -140,7 +98,7 @@ public class TwIRChbot extends javax.swing.JFrame {
 		updateButton.setText("Update and Reconnect");
 		updateButton.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
-				updateButtonMouseClicked(evt);
+				updateButtonMouseClicked();
 			}
 		});
 
@@ -211,7 +169,7 @@ public class TwIRChbot extends javax.swing.JFrame {
 		}
 	}
 
-	private void updateButtonMouseClicked(java.awt.event.MouseEvent evt) {
+	private void updateButtonMouseClicked() {
 		// Update the values in memory
 		updateConnectValues();
 
@@ -258,12 +216,7 @@ public class TwIRChbot extends javax.swing.JFrame {
 			} else {
 				chat.append("Disconnecting from channel " + currentChannel + "\n");
 				bot.partChannel(currentChannel);
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				wait(1);
 				chat.append("Connecting to channel " + channel + "\n");
 				currentChannel = channel;
 				bot.joinChannel(currentChannel);
@@ -271,31 +224,44 @@ public class TwIRChbot extends javax.swing.JFrame {
 		}
 	}
 
-	public static void updateChat(String sender, String message) {
+	static void updateChat(String sender, String message) {
 		chat.append("[" + getTime() + "] " + sender + ": " + message + "\n");
 	}
 
 	@SuppressWarnings("deprecation")
 	private static String getTime() {
+		String hour;
+		String minute;
+		String second;
 		if (Calendar.getInstance().getTime().getHours() < 10) {
-			h = "0" + Calendar.getInstance().getTime().getHours();
+			hour = "0" + Calendar.getInstance().getTime().getHours();
 		} else {
-			h = "" + Calendar.getInstance().getTime().getHours();
+			hour = "" + Calendar.getInstance().getTime().getHours();
 		}
 		if (Calendar.getInstance().getTime().getMinutes() < 10) {
-			m = "0" + Calendar.getInstance().getTime().getMinutes();
+			minute = "0" + Calendar.getInstance().getTime().getMinutes();
 		} else {
-			m = "" + Calendar.getInstance().getTime().getMinutes();
+			minute = "" + Calendar.getInstance().getTime().getMinutes();
 		}
 		if (Calendar.getInstance().getTime().getSeconds() < 10) {
-			s = "0" + Calendar.getInstance().getTime().getSeconds();
+			second = "0" + Calendar.getInstance().getTime().getSeconds();
 		} else {
-			s = "" + Calendar.getInstance().getTime().getSeconds();
+			second= "" + Calendar.getInstance().getTime().getSeconds();
 		}
-		return (h + ":" + m + ":" + s);
+		return (hour + ":" + minute + ":" + second);
 	}
 
 	private void manageFiles() {
+
+	    // Variables
+        String Log = "latest.log";
+        String Login = "login.txt";
+        File log;
+        File commands;
+        File currency;
+        File websites;
+        File readme;
+
 		// Delete the old "latest.log" so a new one can replace it
 		log = new File(directory + Log);
 		log.delete();
@@ -303,8 +269,8 @@ public class TwIRChbot extends javax.swing.JFrame {
 		// Generate a login file if one doesn't exist
 		login = new File(directory + Login);
 		try {
-			login.createNewFile();
-		} catch (IOException e) {
+            login.createNewFile();
+        } catch (IOException e) {
 			System.out.println("login.txt already exists!");
 			e.printStackTrace();
 		}
@@ -330,7 +296,6 @@ public class TwIRChbot extends javax.swing.JFrame {
 				generateCurrencyFile();
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -343,7 +308,6 @@ public class TwIRChbot extends javax.swing.JFrame {
 				generateWebSitesFile();
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -356,12 +320,12 @@ public class TwIRChbot extends javax.swing.JFrame {
 				generateReadMeFile();
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	private void generateCommandsFile() {
+		System.out.println("Attempting to write to Commands file: " + Commands + ".txt");
 		try {
 			file.writeToFile(Commands, "## To create a commented line, put ## at the beginning of the line\n");
 			file.writeToFile(Commands,
@@ -395,7 +359,6 @@ public class TwIRChbot extends javax.swing.JFrame {
 			file.writeToFile(Commands,
 					"##---BROADCASTER-ONLY: Sends \"Hey! Check out this cool person www.twitch.tv/<LAST>\" in chat, where <LAST> is the last word sent with the command.\n");
 		} catch (IOException IOErr) {
-			// TODO Auto-generated catch block
 			IOErr.printStackTrace();
 		}
 	}
@@ -405,7 +368,6 @@ public class TwIRChbot extends javax.swing.JFrame {
 			file.writeToFile(Currency, "##Cannot Be Empty\n");
 			file.writeToFile(Currency, "##Lines with \"##\" within them are ignored.\n");
 		} catch (IOException IOErr) {
-			// TODO Auto-generated catch block
 			IOErr.printStackTrace();
 		}
 	}
@@ -487,12 +449,16 @@ public class TwIRChbot extends javax.swing.JFrame {
 		}
 	}
 
+	public static void wait(int seconds){
+        try {
+            Thread.sleep(seconds * 1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 	public static void main(String args[]) {
 		/* Create and display the form */
-		java.awt.EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				new TwIRChbot().setVisible(true);
-			}
-		});
+		EventQueue.invokeLater(() -> new TwIRChbot().setVisible(true));
 	}
 }

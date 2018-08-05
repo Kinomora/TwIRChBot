@@ -1,3 +1,10 @@
+0.11.2.0-Alpha
+~Imported project to IntelliJ and cleaned up code.
+?Song request code still need an overlook
+
+0.11.1.0-Alpha
++Added song requests/general requests. (This still needs finishing, I'm tired and drunk. Users can't request songs yet, !next doesn't work, and you might wanna check the rest of the logic too)
+
 0.11.0.1-Alpha
 ~Changed <channel> + " isn't streaming with anyone." to <channel>.substring(1) + " isn't streaming with anyone."
 
